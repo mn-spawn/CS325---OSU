@@ -138,3 +138,6 @@ def lcs3(s1, s2, s3):
 s1 = file_contents_letters(sys.argv[1])
 s2 = file_contents_letters(sys.argv[2])
 print(edit_distance(s1, s2), lcs(s1, s2))
+
+#for me to copy and paste into terminal
+# python3 HW5.py COVID-RefDec19.txt COVID-OmicronBA1.txt
