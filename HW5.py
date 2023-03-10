@@ -42,6 +42,7 @@ def edit_distance(s1, s2, ci = 1, cd = 1, cm = 1):
         for j in range(len(s2) + 1):
 
             #if first row or column it is 0
+            #this is the amount of characters you change in an empty string
             if i == 0:
               T[i][j] = 0  
 
@@ -50,15 +51,20 @@ def edit_distance(s1, s2, ci = 1, cd = 1, cm = 1):
 
 
             else:
-                #we have three cases here
-                #get the cost of 
+                #we have three cases here 
+                #previous cost so far plus the cost of inserting
+                #we use T[i][j-2] here because we want s1 to match all the way to j-1 and
+                #then insert one to match to the jth index, same logic below
                 insert = T[i][j-1] + ci
-                #get cost of deletiong by looking 
+                
+                #previous cost so far plus the cost of deleting
                 delete = T[i-1][j] + cd
-                #
+                
+                #get the cost of sub by getting the cost of matching the string up to the j-1
+                #index for both strings then compare and sub if needed for j index.
                 sub = T[i-1][j-1] + (cm if s1[i-1] != s2[j-1] else 0)
 
-                #we want to do the min change
+                #we want to do the min change hence min edit distance
                 T[i][j] = min(insert, delete, sub)
 
 
@@ -87,7 +93,7 @@ def lcs(s1, s2):
         for j in range(1, len(s2) + 1):
             if s1[i - 1] == s2[j - 1]:
                 
-                #we got a match? cool add it to the tally update the table
+                #we got a match? cool add 1 to the tally, update the table
                 table[i][j] = table[i - 1][j - 1] + 1
             else:
                 #no match? get the previously calculated max
@@ -99,7 +105,6 @@ def lcs(s1, s2):
 
     return table[-1][-1]
     
-
 
 def lcs3(s1, s2, s3):
     """
@@ -120,7 +125,7 @@ def lcs3(s1, s2, s3):
     table = [[[0 for _ in range(len(s3)+1)] for _ in range(len(s2)+1)] for _ in range(len(s1)+1)]
 
     #fill in the table using dynamic programming
-
+    #see comments above for explanation
     for i in range(1, len(s1)+1):
         for j in range(1, len(s2)+1):
             for k in range(1, len(s3)+1):
@@ -130,14 +135,18 @@ def lcs3(s1, s2, s3):
                     table[i][j][k] = max(table[i-1][j][k], table[i][j-1][k], table[i][j][k-1])
     
 
-    #not the length so that the table starts at 0 and we don't go out of bounds if
+    #not the length+1 like other so that the table starts at 0 and we don't go out of bounds if
     #we need data in the very beggining of filling out the table
     return table[-1][-1][-1]
+
+
+#------------------Question 3 ----------------------#
+
+#192 29703
+
+#---------------------------------------------------#
 
 
 s1 = file_contents_letters(sys.argv[1])
 s2 = file_contents_letters(sys.argv[2])
 print(edit_distance(s1, s2), lcs(s1, s2))
-
-#for me to copy and paste into terminal
-# python3 HW5.py COVID-RefDec19.txt COVID-OmicronBA1.txt
